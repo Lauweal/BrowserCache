@@ -1,6 +1,6 @@
 import { load } from '@fingerprintjs/fingerprintjs';
 
-function getFingerprintCode() {
+export function getFingerprintCode() {
   return load().then((code) => code.get()).then((code) => code.visitorId);
 }
 
@@ -22,11 +22,6 @@ export abstract class AbstractTable<T = any, D = any> {
 export abstract class AbstractDB {
   constructor(protected name: string) { }
   protected status: boolean;
-
-  protected async createVersion() {
-    this.version = await getFingerprintCode();
-    return this.version;
-  }
 
   public get version() {
     return this.version;

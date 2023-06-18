@@ -1,5 +1,5 @@
 import { isArray, log } from "@frade-sam/samtools";
-import { AbstractDB, AbstractTable, Table } from "./abstract.db";
+import { AbstractDB, AbstractTable, Table, getFingerprintCode } from "./abstract.db";
 
 
 class DefaultDBTable<T = any> extends AbstractTable<T, Storage> {
@@ -71,7 +71,7 @@ class DefaultDBTable<T = any> extends AbstractTable<T, Storage> {
 
 export class DefaultDBStorage extends AbstractDB {
   public async create(): Promise<AbstractDB> {
-    await this.createVersion();
+    this.version = await getFingerprintCode();
     this.status = true;
     return this;
   }

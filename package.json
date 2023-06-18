@@ -1,5 +1,5 @@
 {
-  "name": "@frade-sam/browsercache",
+  "name": "@diablo-o/browsercache",
   "version": "1.0.1",
   "description": "",
   "main": "lib/index.js",
@@ -9,6 +9,9 @@
     "changeset": "changeset",
     "version": "changeset version && pnpm install"
   },
+  "files": [
+    "lib"
+  ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
