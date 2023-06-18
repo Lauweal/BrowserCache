@@ -100,7 +100,7 @@ export class DefaultDBStorage extends AbstractDB {
   }
   public table<T = any>(name: string): AbstractTable<T> {
     if (!this.status) return;
-    const key = `${this.name}_${name}_${this.version}`;
-    return new DefaultDBTable<T>(localStorage, key)
+    const key = `${this.config.name}_${name}_${this.version}`;
+    return new DefaultDBTable<T>(this.config, localStorage, key)
   }
 }

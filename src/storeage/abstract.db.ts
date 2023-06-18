@@ -10,9 +10,10 @@ export type Table<T = any> = { id: number | string } & T;
 export type Level = 'info' | 'error' | 'waring';
 
 export abstract class AbstractTable<T = any, D = any> {
-  constructor(protected db: D, protected name: string) { }
+  constructor(protected config: DbConfig, protected db: D, protected name: string) { }
 
   protected log(level: Level, id: string, action: string, ...message: any) {
+    if (!this.config.debug) return;
     if (level === 'error') {
       log.error(`[TABLE_${this.name}]:${action}${id}`, ...message);
     }
@@ -36,20 +37,26 @@ export abstract class AbstractTable<T = any, D = any> {
   public abstract delete(id: string): Promise<boolean>;
 }
 
+export type DbConfig = {
+  name: string;
+  debug?: boolean;
+}
+
 export abstract class AbstractDB {
-  constructor(protected name: string) { }
+  constructor(protected config: DbConfig) { }
   protected status: boolean;
   protected _version: string;
 
   protected log(level: Level, action: string, ...message: any) {
+    if (!this.config.debug) return;
     if (level === 'error') {
-      log.error(`[DATA_${this.name}]:${action}${this.version}`, ...message);
+      log.error(`[DATA_${this.config.name}]:${action}${this.version}`, ...message);
     }
     if (level === 'info') {
-      log.info(`[DATA_${this.name}]:${action}${this.version}`, ...message);
+      log.info(`[DATA_${this.config.name}]:${action}${this.version}`, ...message);
     }
     if (level === 'waring') {
-      log.warn(`[DATA_${this.name}]:${action}${this.version}`, ...message);
+      log.warn(`[DATA_${this.config.name}]:${action}${this.version}`, ...message);
     }
   }
 
