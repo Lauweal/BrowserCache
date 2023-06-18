@@ -1,6 +1,6 @@
 {
   "name": "@diablo-o/browsercache",
-  "version": "1.0.2",
+  "version": "1.0.8",
   "description": "",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,11 +29,11 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
     "@fingerprintjs/fingerprintjs": "^3.4.1",
-    "@frade-sam/samtools": "^1.2.10",
+    "@frade-sam/samtools": "1.2.11",
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@frade-sam/samtools": "^1.2.10",
+    "@frade-sam/samtools": "1.2.11",
     "lodash": "^4.17.21"
   }
 }

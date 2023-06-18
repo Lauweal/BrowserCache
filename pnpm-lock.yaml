@@ -3,13 +3,13 @@ lockfileVersion: 5.4
 specifiers:
   '@changesets/cli': ^2.26.1
   '@fingerprintjs/fingerprintjs': ^3.4.1
-  '@frade-sam/samtools': ^1.2.10
+  '@frade-sam/samtools': 1.2.11
   lodash: ^4.17.21
 
 devDependencies:
   '@changesets/cli': 2.26.1
   '@fingerprintjs/fingerprintjs': 3.4.1
-  '@frade-sam/samtools': 1.2.10
+  '@frade-sam/samtools': 1.2.11
   lodash: 4.17.21
 
 packages:
@@ -232,8 +232,8 @@ packages:
       tslib: 2.5.3
     dev: true
 
-  /@frade-sam/samtools/1.2.10:
-    resolution: {integrity: sha512-up5C2Ckn4sOWm/0KnXjzvtX0JquSmAJRtyjSHa4nJJNk3tn64yE1KMvkWemXNsWunW8fwlExN5+rq35g0aYyug==}
+  /@frade-sam/samtools/1.2.11:
+    resolution: {integrity: sha512-5ZONKg96/GY20oCv4jUe5jsCw+K21ysWgddfbpR9571y+agr555eMrqub2Xb7HCPqM0/WBu41AoCcy/c6HDY1Q==}
     dev: true
 
   /@manypkg/find-root/1.1.0:

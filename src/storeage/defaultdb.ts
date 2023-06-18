@@ -3,67 +3,87 @@ import { AbstractDB, AbstractTable, Table, getFingerprintCode } from "./abstract
 
 
 class DefaultDBTable<T = any> extends AbstractTable<T, Storage> {
-  public async add(id: string, data: T): Promise<Table<T>> {
+  private serialize(value) {
     try {
-      const tables = JSON.parse(this.db.getItem(this.name)) as Table<T>[];
+      this.db.setItem(this.name, JSON.stringify(value ?? []));
+      return value;
+    } catch (error) {
+      this.db.setItem(this.name, JSON.stringify([]));
+      return [];
+    }
+  }
+
+  private deserialize(valueNew) {
+    try {
+      const val = this.db.getItem(valueNew);
+      return JSON.parse(val);
+    } catch (error) {
+      return [];
+    }
+  }
+
+  public async add(id: string, data: T): Promise<Table<T>> {
+    const tables = this.deserialize(this.name) as Table<T>[];
+    try {
       const res = tables.find((item) => item.id === id);
       if (res) {
-        log.info(`[LOCAL_DB(add) ==> ${this.name}]:${id}`, '已经存在');
-        throw new Error('已经存在');
+        this.log('error', id, '新增', '已经存在');
+        return;
       }
       tables.push({ ...data, id } as Table<T>);
-      this.db.setItem(this.name, JSON.stringify(tables ?? []));
+      this.serialize(tables);
+      this.log('info', id, '新增', tables);
       return { ...data, id } as Table<T>;
     } catch (error) {
-      log.error(`[LOCAL_DB(add) ==> ${this.name}]:${id}`, '访问异常');
-      throw new Error('访问异常');
+      this.log('error', id, '新增', error);
+      return undefined;
     }
   }
   public async find(id: string): Promise<Table<T>> {
     try {
-      const tables = JSON.parse(this.db.getItem(this.name)) as Table<T>[];
+      const tables = this.deserialize(this.name);
       if (isArray(tables)) {
         const res = tables.find((item) => item.id === id);
         if (res) {
-          log.info(`[LOCAL_DB(find) ==> ${this.name}]:${id}`, res);
+          this.log('info', id, '查找', res);
           return res;
         }
-        log.error(`[LOCAL_DB(find) ==> ${this.name}]:${id}`, '不存在');
+        this.log('error', id, '查找', id);
         return undefined;
       }
-      log.error(`[LOCAL_DB(find) ==> ${this.name}]:${id}`, '不存在');
+      this.log('error', id, '查找', id);
       return undefined;
     } catch (error) {
-      log.error(`[LOCAL_DB(find) ==> ${this.name}]:${id}`, error);
+      this.log('error', id, '查找', error);
       return undefined;
     }
   }
   public async update(id: string, data: T): Promise<Table<T>> {
+    let tables = this.deserialize(this.name) as Table<T>[];
     try {
-      let tables = JSON.parse(this.db.getItem(this.name)) as Table<T>[];
       tables = tables.map((item) => {
         if (item.id === id) {
           return { ...item, ...data };
         }
         return item;
       })
-      this.db.setItem(this.name, JSON.stringify(tables ?? []));
-      log.info(`[LOCAL_DB(update) ==> ${this.name}]:${id}`, tables);
+      this.serialize(tables);
+      this.log('info', id, '更新', tables);
       return { ...data, id } as Table<T>;
     } catch (error) {
-      log.error(`[LOCAL_DB(add) ==> ${this.name}]:${id}`, '访问异常');
-      throw new Error('访问异常');
+      this.log('error', id, '更新', error);
+      return undefined
     }
   }
   public async delete(id: string): Promise<boolean> {
+    let tables = this.deserialize(this.name) as Table<T>[];
     try {
-      let tables = JSON.parse(this.db.getItem(this.name)) as Table<T>[];
       tables = tables.filter((item) => item.id !== id);
-      this.db.setItem(this.name, JSON.stringify(tables ?? []));
-      log.info(`[LOCAL_DB(delete) ==> ${this.name}]:${id}`, tables);
+      this.serialize(tables);
+      this.log('info', id, '删除', id);
       return true;
     } catch (error) {
-      log.error(`[LOCAL_DB(delete) ==> ${this.name}]:${id}`, '访问异常');
+      this.log('error', id, '删除', error);
       return false;
     }
   }
