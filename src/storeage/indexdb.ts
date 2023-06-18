@@ -1,4 +1,4 @@
-import { isFunc, log } from '@frade-sam/samtools';
+import { isEmpty, isFunc, isString, log } from '@frade-sam/samtools';
 import { AbstractDB, AbstractTable, Table, getFingerprintCode } from "./abstract.db";
 
 
@@ -19,7 +19,7 @@ class IndexDBTable<T = any> extends AbstractTable<T, IDBObjectStore> {
   }
 
   private deserialize(valueNew) {
-    if (valueNew.toLowerCase().startsWith('function(')) {
+    if (isString(valueNew) && valueNew.toLowerCase().startsWith('function(')) {
       return Function('"use strict";return ' + valueNew);
     }
     if (typeof valueNew === 'object') {
@@ -78,6 +78,7 @@ class IndexDBTable<T = any> extends AbstractTable<T, IDBObjectStore> {
       return new Promise((reslove) => {
         res.onsuccess = (event) => {
           this.log('info', id, '查找', res.result);
+          if (isEmpty(res.result)) return reslove(undefined);
           reslove(this.deserialize(res.result));
         }
         res.onerror = (event: any) => {
