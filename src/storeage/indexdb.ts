@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 import { isFunc, log } from '@frade-sam/samtools';
-import { AbstractDB, AbstractTable, Table } from "./abstract.db";
+import { AbstractDB, AbstractTable, Table, getFingerprintCode } from "./abstract.db";
 
 
 class IndexDBTable<T = any> extends AbstractTable<T, IDBObjectStore> {
@@ -86,7 +86,7 @@ export class IndexDbStorage extends AbstractDB {
   }
 
   public async create(): Promise<AbstractDB> {
-    await this.createVersion();
+    this.version = await getFingerprintCode();
     try {
       this.db = await this.init();
       this.status = true;

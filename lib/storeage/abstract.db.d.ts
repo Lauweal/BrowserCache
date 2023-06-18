@@ -1,3 +1,4 @@
+export declare function getFingerprintCode(): Promise<string>;
 export declare type Table<T = any> = {
     id: number | string;
 } & T;
@@ -15,7 +16,6 @@ export declare abstract class AbstractDB {
     protected name: string;
     constructor(name: string);
     protected status: boolean;
-    protected createVersion(): Promise<string>;
     get version(): string;
     set version(v: string);
     abstract create(): Promise<AbstractDB>;
