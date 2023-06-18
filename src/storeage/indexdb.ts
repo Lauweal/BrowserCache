@@ -118,12 +118,12 @@ export class IndexDbStorage extends AbstractDB {
   private db: IDBDatabase;
 
   private key() {
-    const keys = this.name.split('');
+    const keys = this.config.name.split('');
     return keys.reduce((a, b) => a | b.charCodeAt(0), 0);
   }
 
   private init(): Promise<IDBDatabase> {
-    const database = window.indexedDB.open(this.name, this.key());
+    const database = window.indexedDB.open(this.config.name, this.key());
     return new Promise((resolve, reject) => {
       database.onupgradeneeded = (event: IDBVersionChangeEvent) => {
         this.log('info', '初始化', '成功');
@@ -163,7 +163,7 @@ export class IndexDbStorage extends AbstractDB {
     if (!this.db.objectStoreNames.contains(key)) {
       this.db.createObjectStore(key, { keyPath: 'id', });
     }
-    return new IndexDBTable<T>(this.db.transaction([key], "readwrite").objectStore(key), name);
+    return new IndexDBTable<T>(this.config, this.db.transaction([key], "readwrite").objectStore(key), name);
   }
 
 }

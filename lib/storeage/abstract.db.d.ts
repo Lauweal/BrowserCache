@@ -4,9 +4,10 @@ export declare type Table<T = any> = {
 } & T;
 export declare type Level = 'info' | 'error' | 'waring';
 export declare abstract class AbstractTable<T = any, D = any> {
+    protected config: DbConfig;
     protected db: D;
     protected name: string;
-    constructor(db: D, name: string);
+    constructor(config: DbConfig, db: D, name: string);
     protected log(level: Level, id: string, action: string, ...message: any): void;
     private tables;
     abstract add(id: string, data: T): Promise<Table<T>>;
@@ -14,9 +15,13 @@ export declare abstract class AbstractTable<T = any, D = any> {
     abstract update(id: string, data: T): Promise<Table<T>>;
     abstract delete(id: string): Promise<boolean>;
 }
+export declare type DbConfig = {
+    name: string;
+    debug?: boolean;
+};
 export declare abstract class AbstractDB {
-    protected name: string;
-    constructor(name: string);
+    protected config: DbConfig;
+    constructor(config: DbConfig);
     protected status: boolean;
     protected _version: string;
     protected log(level: Level, action: string, ...message: any): void;
