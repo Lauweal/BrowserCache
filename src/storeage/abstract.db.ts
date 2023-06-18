@@ -22,13 +22,14 @@ export abstract class AbstractTable<T = any, D = any> {
 export abstract class AbstractDB {
   constructor(protected name: string) { }
   protected status: boolean;
+  protected _version: string;
 
   public get version() {
-    return this.version;
+    return this._version;
   }
 
   public set version(v: string) {
-    this.version = v;
+    this._version = v;
   }
 
   public abstract create(): Promise<AbstractDB>;

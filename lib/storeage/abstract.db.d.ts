@@ -16,6 +16,7 @@ export declare abstract class AbstractDB {
     protected name: string;
     constructor(name: string);
     protected status: boolean;
+    protected _version: string;
     get version(): string;
     set version(v: string);
     abstract create(): Promise<AbstractDB>;
