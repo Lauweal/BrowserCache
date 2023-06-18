@@ -1,0 +1,36 @@
+{
+  "name": "@frade-sam/browsercache",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "changeset": "changeset",
+    "version": "changeset version && pnpm install"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lauweal/BrowserCache.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lauweal/BrowserCache/issues"
+  },
+  "homepage": "https://github.com/Lauweal/BrowserCache#readme",
+  "devDependencies": {
+    "@changesets/cli": "^2.26.1",
+    "@fingerprintjs/fingerprintjs": "^3.4.1",
+    "@frade-sam/samtools": "^1.2.10",
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "@frade-sam/samtools": "^1.2.10",
+    "lodash": "^4.17.21"
+  }
+}
