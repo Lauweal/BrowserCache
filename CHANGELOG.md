@@ -1,5 +1,11 @@
 # @frade-sam/browsercache
 
+## 1.0.15
+
+### Patch Changes
+
+- 135dc26: bugfix
+
 ## 1.0.14
 
 ### Patch Changes
