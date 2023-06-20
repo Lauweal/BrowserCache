@@ -1,5 +1,11 @@
 # @frade-sam/browsercache
 
+## 1.0.12
+
+### Patch Changes
+
+- e1b76af: debug
+
 ## 1.0.2
 
 ### Patch Changes
