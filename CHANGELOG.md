@@ -1,5 +1,11 @@
 # @frade-sam/browsercache
 
+## 1.0.13
+
+### Patch Changes
+
+- f55d17b: 1.0.13
+
 ## 1.0.12
 
 ### Patch Changes
