@@ -10,7 +10,14 @@ export type Table<T = any> = { id: number | string } & T;
 export type Level = 'info' | 'error' | 'waring';
 
 export abstract class AbstractTable<T = any, D = any> {
-  constructor(protected config: DbConfig, protected db: D, protected name: string) { }
+  private static map = new Map();
+  constructor(protected config: DbConfig, protected db: D, protected name: string) {
+    const key = `${config.name}_${name}`
+    if (!AbstractTable.map.has(key)) {
+      AbstractTable.map.set(key, this);
+    }
+    AbstractTable.map.get(key);
+  }
 
   protected log(level: Level, id: string, action: string, ...message: any) {
     if (!this.config.debug) return;
@@ -43,7 +50,14 @@ export type DbConfig = {
 }
 
 export abstract class AbstractDB {
-  constructor(protected config: DbConfig) { }
+  private static map = new Map();
+  constructor(protected config: DbConfig) {
+    const key = config.name;
+    if (!AbstractDB.map.has(key)) {
+      AbstractDB.map.set(key, this);
+    }
+    AbstractDB.map.get(key);
+  }
   protected status: boolean;
   protected _version: string;
 

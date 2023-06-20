@@ -30,10 +30,14 @@
     "@changesets/cli": "^2.26.1",
     "@fingerprintjs/fingerprintjs": "^3.4.1",
     "@frade-sam/samtools": "1.2.11",
-    "lodash": "^4.17.21"
+    "joi": "^17.9.2",
+    "lodash": "^4.17.21",
+    "lodash.get": "^4.4.2"
   },
   "peerDependencies": {
     "@frade-sam/samtools": "1.2.11",
-    "lodash": "^4.17.21"
+    "joi": "^17.9.2",
+    "lodash": "^4.17.21",
+    "lodash.get": "^4.4.2"
   }
 }
