@@ -13,11 +13,11 @@ type Payload = {
     data?: any
 }
 
-function createSchema(config:Fields) {
+function createSchema(config: Fields) {
     return Joi.object(Object.entries(config).reduce((a, b) => {
         const [key, conf] = b;
         let field = Joi[conf.type]();
-        if(conf.required) {
+        if (conf.required) {
             field = field.required();
         }
         a[key] = field;
@@ -29,7 +29,7 @@ export default class IndexDatabase {
     constructor(private readonly name: string, private readonly debug?: boolean) { }
     private events: Map<IndexDBEvent, EventFunc[]> = new Map();
     private tables: Map<string, IndexDBTable> = new Map();
-    private db:IDBDatabase;
+    private db: IDBDatabase;
     private _open: boolean = false;
 
     public get version() {
@@ -50,35 +50,38 @@ export default class IndexDatabase {
     }
 
     private error(message: string) {
-        log.error(`[indexDB:${this.name}(${this.version})]`, message) 
+        log.error(`[indexDB:${this.name}(${this.version})]`, message)
     }
 
     private getEvent(event: IndexDBEvent) {
         return this.events.get(event) ?? [];
     }
 
-    private setEvent(event: IndexDBEvent, func:EventFunc) {
+    private setEvent(event: IndexDBEvent, func: EventFunc) {
         const events = this.getEvent(event);
         events.push(func);
         this.events.set(event, events);
     }
 
-    private on(event:IndexDBEvent, payload: Payload) {
-        if(!this.open && isEmpty(this.db)) return;
+    private on(event: IndexDBEvent, payload: Payload) {
+        if (!this.open && isEmpty(this.db)) return;
         const events = this.getEvent(event);
         events.forEach((item) => {
             item(payload);
         })
     }
 
-    public connect():Promise<IndexDatabase> {
+    public connect(): Promise<IndexDatabase> {
         const db = window.indexedDB.open(this.name, this.version)
         return new Promise((reslove) => {
             db.onupgradeneeded = () => {
-                this.db = db.result;
                 this.open = true;
                 this.log(`${this.name}链接成功`);
                 this.on('connect', { code: 0, message: `${this.name}链接成功` });
+            }
+            db.onsuccess = () => {
+                this.db = db.result;
+                this.log(`${this.name}创建成功`);
                 reslove(this);
             }
             db.onerror = (ev: any) => {
@@ -91,17 +94,17 @@ export default class IndexDatabase {
         })
     }
 
-    public emit(event: IndexDBEvent, func:EventFunc) {
-        if(!this.open && isEmpty(this.db)) return;
+    public emit(event: IndexDBEvent, func: EventFunc) {
+        if (!this.open && isEmpty(this.db)) return;
         this.setEvent(event, func)
     }
 
-    public createTable<T>(name: string, schema:Fields):IndexDBTable<T> {
-        if(this.tables.has(name)) {
+    public createTable<T>(name: string, schema: Fields): IndexDBTable<T> {
+        if (this.tables.has(name)) {
             return this.tables.get(name);
         }
         const config = createSchema(schema);
-        const table = new IndexDBTable<T>(this.name, name, config,this.db.transaction([name], 'readwrite').objectStore(name));
+        const table = new IndexDBTable<T>(this.name, name, config, this.db.transaction([name], 'readwrite').objectStore(name));
         this.tables.set(name, table);
         return table;
     }
