@@ -100,6 +100,9 @@ export default class IndexDatabase {
     }
 
     public createTable<T>(name: string, schema: Fields): IndexDBTable<T> {
+        if (!this.db.objectStoreNames.contains(name)) {
+            this.db.createObjectStore(name, { keyPath: 'id', });
+        }
         if (this.tables.has(name)) {
             return this.tables.get(name);
         }
