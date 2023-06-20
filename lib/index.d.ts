@@ -1,2 +1,5 @@
-import { AbstractDB, DbConfig } from "./storeage/abstract.db";
-export default function createCache(config: DbConfig): AbstractDB;
+import IndexDatabase from "./IndexDatabase";
+import LocalDatabase from "./LocalDatabase";
+export default class Cache {
+    static create(name: string, debug?: boolean): IndexDatabase | LocalDatabase;
+}

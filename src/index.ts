@@ -1,10 +1,18 @@
 import { isEmpty } from "@frade-sam/samtools";
-import { DefaultDBStorage } from "./storeage/defaultdb";
-import { IndexDbStorage } from "./storeage/indexdb";
-import { AbstractDB, DbConfig } from "./storeage/abstract.db";
+import IndexDatabase from "./IndexDatabase";
+import LocalDatabase from "./LocalDatabase";
 
-
-export default function createCache(config: DbConfig): AbstractDB {
-  if (isEmpty(window.indexedDB)) return new DefaultDBStorage(config);
-  return new IndexDbStorage(config);
+type DataType = 'index' | 'local';
+export default class Cache {
+  static create(name: string, debug?: boolean) {
+    const type:DataType = isEmpty(window.indexedDB) ? 'local' : 'index';
+    switch (type) {
+      case 'index':
+        return new IndexDatabase(name, debug);
+        break;
+      default:
+        return new LocalDatabase(name, debug);
+        break;
+    } 
+  }
 }
